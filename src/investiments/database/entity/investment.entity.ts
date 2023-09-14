@@ -19,8 +19,8 @@ export class InvestmentEntity {
 
   @Column({ length: 100 })
   applicationDate: string;
-  
-  @ManyToOne(() => BankEntity, (bank) => bank.investments)
-  bank: BankEntity
+
+  @Column('int')
+  bankId: number;
 
 }

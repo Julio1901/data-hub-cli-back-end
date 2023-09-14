@@ -11,7 +11,4 @@ export class BankEntity {
     
     @Column('int')
     savedMoney: number
-    
-    @OneToMany(()=> InvestmentEntity, (investment) => investment.bank)
-    investments: InvestmentEntity[]
 }
