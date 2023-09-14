@@ -20,6 +20,7 @@ export class InvestmentResolver {
     @Query(() => [InvestmentObject])
     async getInvestments() {
         const result = await this.investmentService.findAll()
+        console.log(result[0].bank)
         const response : InvestmentObject[]= result.map((investment) => {
             return new InvestmentObject(
                 investment.id,

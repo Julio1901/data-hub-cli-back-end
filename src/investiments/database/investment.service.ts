@@ -15,7 +15,9 @@ export class InvestmentService {
   ) {}
 
   async findAll(): Promise<InvestmentEntity[]> {
-    return this.investmentRepository.find();
+    return this.investmentRepository.find({
+      relations: ['bank']
+    });
   }
 
   async getBankById(bankId: number): Promise<BankEntity> {
