@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, createQueryBuilder } from 'typeorm';
 import { InvestmentEntity } from './entity/investment.entity';
 import { BankEntity } from './entity/bank.entity';
 
@@ -24,5 +24,24 @@ export class InvestmentService {
     })
     return response
   }
+
+  async updateInvestmentById(id: number, newValue: number): Promise<InvestmentEntity>{
+    const result = await this.investmentRepository.createQueryBuilder()
+    .update(InvestmentEntity)
+    .set({totalInvested: newValue})
+    .where('id = :id', {id: id}).execute()
+    
+    if (result.affected === 0) {
+      throw new Error('Update investment error');
+    }
+
+    const registryUpdated = await this.investmentRepository.findOne({
+      where: { id },
+      relations: ['bank'],
+    });
+    return registryUpdated
+  }
+
+
 
 }
