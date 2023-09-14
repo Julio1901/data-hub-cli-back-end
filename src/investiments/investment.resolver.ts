@@ -19,21 +19,30 @@ export class InvestmentResolver {
     @Query(() => [InvestmentObject])
     async getInvestments() {
         const result = await this.investmentService.findAll()
-        const bankResponse = await this.investmentService.getBankById(1)
-        const bank = new BankObject(
-        bankResponse.name,
-        bankResponse.savedMoney
-        )
+      
         //TODO: Refatorar com map
-        const converted : [InvestmentObject] = [new InvestmentObject(
-            result[0].id,
-            result[0].type,
-            result[0].name,
-            result[0].totalInvested,
-            result[0].applicationDate,
-            bank
-        )]
-            return converted
+        // const converted : [InvestmentObject] = [new InvestmentObject(
+        //     result[0].id,
+        //     result[0].type,
+        //     result[0].name,
+        //     result[0].totalInvested,
+        //     result[0].applicationDate,
+        //     result[0].bank
+        // )]
+        //     return converted
+
+
+        const response : InvestmentObject[]= result.map((investment) => {
+            return new InvestmentObject(
+                investment.id,
+                investment.type,
+                investment.name,
+                investment.totalInvested,
+                investment.applicationDate,
+                investment.bank
+            )
+        })
+        return response
     }
 
 
