@@ -12,3 +12,17 @@ mutation {
     bankId: 1
   })
 }
+
+
+//GET INVESTMENTS
+
+query {
+  getInvestments {
+    id
+    type
+    name
+    totalInvested
+    applicationDate
+    bankId
+  }
+}

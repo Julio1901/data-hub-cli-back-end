@@ -17,7 +17,6 @@ export class InvestmentService {
 
 
    async createNewInvestment(newInvestment : CreateNewInvestmentInput) {
-
     await this.investmentRepository
     .createQueryBuilder()
     .insert()
@@ -30,9 +29,10 @@ export class InvestmentService {
       bankId: newInvestment.bankId
     })
     .execute()
-
-
    }
 
-
+   async getInvestments() : Promise<InvestmentEntity[]>{
+    const investments = await this.investmentRepository.find()
+    return investments
+   }
  }
