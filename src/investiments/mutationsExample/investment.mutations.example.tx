@@ -1,0 +1,14 @@
+
+
+
+//CREATE NEW INVESTMENT
+
+mutation {
+  createNewInvestment(data: {
+    type: "Test Type",
+    name: "Test Name",
+    totalInvested: 1000,
+    applicationDate: "Test data",
+    bankId: 1
+  })
+}
