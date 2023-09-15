@@ -51,4 +51,8 @@ export class InvestmentService {
     .execute()
    } 
 
+   async getBanks() : Promise<BankEntity[]>{
+    const banks = await this.bankRepository.find()
+    return banks
+   }
  }

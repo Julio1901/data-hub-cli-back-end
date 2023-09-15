@@ -3,6 +3,7 @@ import { CreateNewInvestmentArgs } from "./args/create-new-investment-args";
 import { InvestmentService } from "./database/investment.service";
 import { InvestmentOutput } from "./outputs/investment-output";
 import { CreateNewBankArgs } from "./args/create-new-bank-args";
+import { BankOutput } from "./outputs/bank-output";
 
 
 @Resolver()
@@ -51,6 +52,16 @@ export class InvestmentResolver {
         this.investmentService.createNewBank(args.data)
 
         return "Bank create successful"
+    }
+
+    @Query(() => [BankOutput])
+    async getBanks(){
+        const result = await this.investmentService.getBanks()
+        const bankList = result.map (bank => {
+            const bankOutput = BankOutput.fromEntity(bank)
+            return bankOutput
+        })
+        return bankList
     }
 
 }
