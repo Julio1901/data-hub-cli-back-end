@@ -26,3 +26,14 @@ query {
     bankId
   }
 }
+
+//CRETE NEW BANK
+
+mutation {
+  createNewBank(
+    data: {
+      name:  "Nubank",
+      savedMoney: 1000
+		}
+  )
+}

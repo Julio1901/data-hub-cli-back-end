@@ -3,6 +3,7 @@ import { Repository, createQueryBuilder } from 'typeorm';
 import { InvestmentEntity } from './entity/investment.entity';
 import { BankEntity } from './entity/bank.entity';
 import { CreateNewInvestmentInput } from '../inputs/create-new-investment-input';
+import { CreateNewBankInput } from '../inputs/create-new-bank-input';
 
 @Injectable()
 export class InvestmentService {
@@ -15,7 +16,7 @@ export class InvestmentService {
 
   ) {}
 
-
+   //TODO: Realizar tratativa de erros e criar verificações após registro ser criado
    async createNewInvestment(newInvestment : CreateNewInvestmentInput) {
     await this.investmentRepository
     .createQueryBuilder()
@@ -35,4 +36,19 @@ export class InvestmentService {
     const investments = await this.investmentRepository.find()
     return investments
    }
+
+   //TODO: criar validação para que caso o nome do bank já exista não seja possível criar novamente
+   async createNewBank(bank : CreateNewBankInput){
+    await this.bankRepository
+    .createQueryBuilder()
+    .insert()
+    .into(BankEntity)
+    .values(
+      {
+        name: bank.name,
+        savedMoney: bank.savedMoney
+      })
+    .execute()
+   } 
+
  }

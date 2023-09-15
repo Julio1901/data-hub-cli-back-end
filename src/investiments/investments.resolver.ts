@@ -48,9 +48,9 @@ export class InvestmentResolver {
         console.log(args.data.name)
         console.log(args.data.savedMoney)
 
+        this.investmentService.createNewBank(args.data)
+
         return "Bank create successful"
-
-
     }
 
 }
