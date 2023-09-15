@@ -23,7 +23,11 @@ query {
     name
     totalInvested
     applicationDate
-    bankId
+    bank{
+      id
+      name
+      savedMoney
+    }
   }
 }
 

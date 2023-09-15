@@ -17,40 +17,27 @@ export class InvestmentResolver {
     }
 
     @Query(() => [InvestmentOutput])
-    async getInvestments(){
-    const result = await this.investmentService.getInvestments()
-    const investmentList = result.map( investment => {
+    async getInvestments() {
+      const result = await this.investmentService.getInvestments()
+      const investmentList = await Promise.all(result.map(async (investment) => {
         const investmentOutput = InvestmentOutput.fromEntity(investment)
+        const bank = await this.investmentService.getBankById(investment.bankId)
+        investmentOutput.bank = BankOutput.fromEntity(bank)
         return investmentOutput
-
-    })
-    return investmentList
+      }))
+      return investmentList
     }
 
-
+    
     @Mutation(() => String)
     createNewInvestment( @Args() args: CreateNewInvestmentArgs){
-
-        console.log(args.data.name)
-        console.log(args.data.type)
-        console.log(args.data.totalInvested)
-        console.log(args.data.applicationDate)
-        console.log(args.data.bankId)
-
         this.investmentService.createNewInvestment(args.data)
-
-
         return "Investmento criado"
     }
 
     @Mutation(() => String)
     createNewBank( @Args() args: CreateNewBankArgs){
-
-        console.log(args.data.name)
-        console.log(args.data.savedMoney)
-
         this.investmentService.createNewBank(args.data)
-
         return "Bank create successful"
     }
 

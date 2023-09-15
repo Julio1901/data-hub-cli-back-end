@@ -55,4 +55,13 @@ export class InvestmentService {
     const banks = await this.bankRepository.find()
     return banks
    }
+
+   async getBankById(id: number): Promise<BankEntity>{
+    const bank =  await this.bankRepository
+                        .createQueryBuilder("bank_entity")
+                        .where("bank_entity.id= :id", {id: id})
+                        .getOne()
+    return bank
+   }
+
  }
