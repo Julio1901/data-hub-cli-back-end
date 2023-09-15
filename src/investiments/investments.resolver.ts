@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { CreateNewInvestmentArgs } from "./args/create-new-investment-args";
 import { InvestmentService } from "./database/investment.service";
-import { InvestmentEntity } from "./database/entity/investment.entity";
 import { InvestmentOutput } from "./outputs/investment-output";
+import { CreateNewBankArgs } from "./args/create-new-bank-args";
 
 
 @Resolver()
@@ -14,8 +14,6 @@ export class InvestmentResolver {
     investment(){
         return 'Hello world investment'
     }
-
-
 
     @Query(() => [InvestmentOutput])
     async getInvestments(){
@@ -42,6 +40,17 @@ export class InvestmentResolver {
 
 
         return "Investmento criado"
+    }
+
+    @Mutation(() => String)
+    createNewBank( @Args() args: CreateNewBankArgs){
+
+        console.log(args.data.name)
+        console.log(args.data.savedMoney)
+
+        return "Bank create successful"
+
+
     }
 
 }
