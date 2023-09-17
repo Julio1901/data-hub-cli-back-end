@@ -6,5 +6,5 @@ import { UpdateInvestmentInput } from "../inputs/update-investment-input";
 @ArgsType()
 export class CreateNewInvestmentArgs{
     @Field()
-    data: UpdateInvestmentInput
+    data: CreateNewInvestmentInput
 }
