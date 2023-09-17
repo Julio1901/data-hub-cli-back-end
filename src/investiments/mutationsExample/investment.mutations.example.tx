@@ -31,6 +31,31 @@ query {
   }
 }
 
+
+// UPDATE INVESTMENT
+
+mutation {
+	updateInvestment( data: {
+		id: 10,
+		type: "Renda Fixa",
+		name: "Tesouro SELIC",
+		totalInvested: 1000,
+		applicationDate: "Ainda não informado",
+		bankId: 1
+	}){
+		 id
+    type
+    name
+    totalInvested
+    applicationDate
+    bank{
+      id
+      name
+      savedMoney
+    }
+	}
+}
+
 //CRETE NEW BANK
 
 mutation {

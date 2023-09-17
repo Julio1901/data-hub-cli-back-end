@@ -4,6 +4,7 @@ import { InvestmentEntity } from './entity/investment.entity';
 import { BankEntity } from './entity/bank.entity';
 import { CreateNewInvestmentInput } from '../inputs/create-new-investment-input';
 import { CreateNewBankInput } from '../inputs/create-new-bank-input';
+import { UpdateInvestmentInput } from '../inputs/update-investment-input';
 
 @Injectable()
 export class InvestmentService {
@@ -36,6 +37,24 @@ export class InvestmentService {
     const investments = await this.investmentRepository.find()
     return investments
    }
+
+   async updateInvestment(investment: UpdateInvestmentInput) : Promise<InvestmentEntity>{
+    await this.investmentRepository
+    .createQueryBuilder()
+    .update(InvestmentEntity)
+    .set(investment)
+    .where("id = :id", {id: investment.id})
+    .execute()
+
+    const investmentUpdated = await this.investmentRepository
+                              .createQueryBuilder()
+                              .select("investment")
+                              .from(InvestmentEntity, "investment")
+                              .where("investment.id = :id", {id: investment.id})
+                              .getOne()
+    return investmentUpdated
+   }
+
 
    //TODO: criar validação para que caso o nome do bank já exista não seja possível criar novamente
    async createNewBank(bank : CreateNewBankInput){
