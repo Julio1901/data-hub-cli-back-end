@@ -5,6 +5,7 @@ import { BankEntity } from './entity/bank.entity';
 import { CreateNewInvestmentInput } from '../inputs/create-new-investment-input';
 import { CreateNewBankInput } from '../inputs/create-new-bank-input';
 import { UpdateInvestmentInput } from '../inputs/update-investment-input';
+import { DeleteInvestmentInput } from '../inputs/delete-investment-input';
 
 @Injectable()
 export class InvestmentService {
@@ -55,6 +56,19 @@ export class InvestmentService {
     return investmentUpdated
    }
 
+
+   async deleteInvestment(deleteInvestmentInput: DeleteInvestmentInput): Promise<String>{
+    
+    await this.investmentRepository
+          .createQueryBuilder('investment_entity')
+          .delete()
+          .from(InvestmentEntity)
+          .where("id = :id", {id : deleteInvestmentInput.id})
+          .execute()
+    
+   return 'Investimento deletado com sucesso'
+
+   }
 
    //TODO: criar validação para que caso o nome do bank já exista não seja possível criar novamente
    async createNewBank(bank : CreateNewBankInput){

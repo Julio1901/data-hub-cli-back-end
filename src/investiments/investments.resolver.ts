@@ -6,6 +6,7 @@ import { CreateNewBankArgs } from "./args/create-new-bank-args";
 import { BankOutput } from "./outputs/bank-output";
 import { UpdateInvestmentInput } from "./inputs/update-investment-input";
 import { UpdateInvestmentArgs } from "./args/update-investment-args";
+import { DeleteInvestmentArgs } from "./args/delete-investment-args";
 
 
 
@@ -42,6 +43,11 @@ export class InvestmentResolver {
         return response
     }
 
+    @Mutation(() => String)
+    async deleteInvestment( @Args() args: DeleteInvestmentArgs){
+        this.investmentService.deleteInvestment(args.data)
+        return 'Investimento deletado'
+    }
 
     @Mutation(() => String)
     createNewBank( @Args() args: CreateNewBankArgs){
