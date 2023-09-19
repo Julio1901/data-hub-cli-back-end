@@ -4,7 +4,6 @@ import { InvestmentService } from "./database/investment.service";
 import { InvestmentOutput } from "./outputs/investment-output";
 import { CreateNewBankArgs } from "./args/create-new-bank-args";
 import { BankOutput } from "./outputs/bank-output";
-import { UpdateInvestmentInput } from "./inputs/update-investment-input";
 import { UpdateInvestmentArgs } from "./args/update-investment-args";
 import { DeleteInvestmentArgs } from "./args/delete-investment-args";
 import { HttpException, HttpStatus } from "@nestjs/common";
@@ -32,7 +31,7 @@ export class InvestmentResolver {
     async createNewInvestment( @Args() args: CreateNewInvestmentArgs){
          try {
             await this.investmentService.createNewInvestment(args.data)
-            return "Investmento criado"
+            return "Successfully created investment"
          }catch(error){
             if (error.message === "Error while creating the investment: This investment is already registered"){
                 throw new HttpException(error.message, HttpStatus.CONFLICT)
@@ -56,7 +55,7 @@ export class InvestmentResolver {
     @Mutation(() => String)
     async deleteInvestment( @Args() args: DeleteInvestmentArgs){
         this.investmentService.deleteInvestment(args.data)
-        return 'Investimento deletado'
+        return 'Successfully investment deleted'
     }
 
     @Mutation(() => String)
