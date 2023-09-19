@@ -5,6 +5,8 @@
     "investmentDeletedSuccessfully": "Investment successfully deleted",
     "updateInvestmentError" : "Error updating investment",
     "recoveringInvestmentsError" : "Error recovering investments",
+    "deleteInvestmentError": "Deleting investment error",
     "bankAlreadyRegistered": "This bank is already registered",
-    "createBankError" : "Error while creating the bank"
+    "createBankError" : "Error while creating the bank",
+    "deleteBankError" : "Error when deleting bank"
 }

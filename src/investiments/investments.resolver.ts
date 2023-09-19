@@ -62,8 +62,12 @@ export class InvestmentResolver {
 
     @Mutation(() => String)
     async deleteInvestment( @Args() args: DeleteInvestmentArgs){
-        this.investmentService.deleteInvestment(args.data)
-        return 'Successfully investment deleted'
+        try {
+            await this.investmentService.deleteInvestment(args.data)
+            return 'Successfully investment deleted'
+        }catch (error){
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR) 
+        }
     }
 
     @Mutation(() => String)

@@ -99,16 +99,21 @@ export class InvestmentService {
 
 
    async deleteInvestment(deleteInvestmentInput: DeleteInvestmentInput): Promise<String>{
-    
-    await this.investmentRepository
-          .createQueryBuilder('investment_entity')
-          .delete()
-          .from(InvestmentEntity)
-          .where("id = :id", {id : deleteInvestmentInput.id})
-          .execute()
-    
-   return this.messageService.getMessage('investmentDeletedSuccessfully')
+    try {
+        const result = await this.investmentRepository
+        .createQueryBuilder('investment_entity')
+        .delete()
+        .from(InvestmentEntity)
+        .where("id = :id", {id : deleteInvestmentInput.id})
+        .execute()
 
+        if (result.affected !== 1) {
+          throw new Error(this.messageService.getMessage('deleteInvestmentError'))
+        }
+        return this.messageService.getMessage('investmentDeletedSuccessfully')
+      }catch(error) {
+        throw new Error(`${this.messageService.getMessage('deleteInvestmentError')}: ${error.message}`)
+      }
    }
 
   async createNewBank(bank : CreateNewBankInput) : Promise<BankEntity>{
