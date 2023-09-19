@@ -70,18 +70,40 @@ export class InvestmentService {
 
    }
 
-   //TODO: criar validação para que caso o nome do bank já exista não seja possível criar novamente
-   async createNewBank(bank : CreateNewBankInput){
-    await this.bankRepository
-    .createQueryBuilder()
-    .insert()
-    .into(BankEntity)
-    .values(
-      {
-        name: bank.name,
-        savedMoney: bank.savedMoney
-      })
-    .execute()
+  async createNewBank(bank : CreateNewBankInput) : Promise<BankEntity>{
+    try{
+        const existingBank = await this.bankRepository
+                             .createQueryBuilder('bank_entity')
+                             .where("name = :name ", {name: bank.name})
+                             .getOne()
+
+        if (existingBank) {
+          throw new Error('This bank is already registered')
+        }
+
+        const result = await this.bankRepository
+        .createQueryBuilder()
+        .insert()
+        .into(BankEntity)
+        .values(
+          {
+            name: bank.name,
+            savedMoney: bank.savedMoney
+          })
+        .execute()
+        
+        if(result.raw.affectedRows !==1) {
+           throw new Error('Error while creating the bank')
+        }
+
+        return await await this.bankRepository
+        .createQueryBuilder('bank_entity')
+        .where("name = :name ", {name: bank.name})
+        .getOne()
+
+    } catch(error){
+        throw new Error(`Error while creating the bank: ${error.message}`)
+    }
    } 
 
    async getBanks() : Promise<BankEntity[]>{

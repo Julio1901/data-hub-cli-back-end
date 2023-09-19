@@ -50,9 +50,10 @@ export class InvestmentResolver {
     }
 
     @Mutation(() => String)
-    createNewBank( @Args() args: CreateNewBankArgs){
-        this.investmentService.createNewBank(args.data)
-        return "Bank create successful"
+    async createNewBank( @Args() args: CreateNewBankArgs){
+        const result = await this.investmentService.createNewBank(args.data)
+            console.log(result)
+            return "Bank create successful"
     }
 
     @Query(() => [BankOutput])
