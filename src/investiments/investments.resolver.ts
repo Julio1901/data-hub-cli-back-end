@@ -17,14 +17,18 @@ export class InvestmentResolver {
 
     @Query(() => [InvestmentOutput])
     async getInvestments() {
-      const result = await this.investmentService.getInvestments()
-      const investmentList = await Promise.all(result.map(async (investment) => {
-        const investmentOutput = InvestmentOutput.fromEntity(investment)
-        const bank = await this.investmentService.getBankById(investment.bankId)
-        investmentOutput.bank = BankOutput.fromEntity(bank)
-        return investmentOutput
-      }))
-      return investmentList
+     try{
+        const result = await this.investmentService.getInvestments()
+        const investmentList = await Promise.all(result.map(async (investment) => {
+          const investmentOutput = InvestmentOutput.fromEntity(investment)
+          const bank = await this.investmentService.getBankById(investment.bankId)
+          investmentOutput.bank = BankOutput.fromEntity(bank)
+          return investmentOutput
+        }))
+        return investmentList
+     } catch(error) {
+        throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+     }
     }
 
     @Mutation(() => String)

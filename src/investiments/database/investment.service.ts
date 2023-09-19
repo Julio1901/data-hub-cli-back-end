@@ -6,6 +6,7 @@ import { CreateNewInvestmentInput } from '../inputs/create-new-investment-input'
 import { CreateNewBankInput } from '../inputs/create-new-bank-input';
 import { UpdateInvestmentInput } from '../inputs/update-investment-input';
 import { DeleteInvestmentInput } from '../inputs/delete-investment-input';
+import { MessageService } from 'src/utils/message-service';
 
 @Injectable()
 export class InvestmentService {
@@ -18,6 +19,8 @@ export class InvestmentService {
 
   ) {}
 
+  private messageService = new MessageService()
+
    async createNewInvestment(newInvestment : CreateNewInvestmentInput) : Promise<InvestmentEntity>{
       try{
           const existingInvestment = await this.investmentRepository
@@ -26,7 +29,7 @@ export class InvestmentService {
                                     .getOne()
 
           if (existingInvestment) {
-            throw new Error ('This investment is already registered')
+            throw new Error (this.messageService.getMessage('investmentAlreadyRegistered'))
           }
 
           const result = await this.investmentRepository
@@ -44,7 +47,7 @@ export class InvestmentService {
 
 
           if(result.raw.affectedRows !== 1){
-            throw new Error('Error while creating the investment')
+            throw new Error(this.messageService.getMessage('createInvestmentError'))
           }
 
           return await this.investmentRepository
@@ -52,15 +55,20 @@ export class InvestmentService {
                  .where("name = :name", {name: newInvestment.name})
                  .getOne()
       }catch(error) {
-          throw new Error(`Error while creating the investment: ${error.message}`)
+          throw new Error(`${this.messageService.getMessage('createInvestmentError')}: ${error.message}`)
     }
     
 
    }
 
    async getInvestments() : Promise<InvestmentEntity[]>{
-    const investments = await this.investmentRepository.find()
-    return investments
+    try{
+      const investments = await this.investmentRepository.find()
+      return investments
+    }catch(error)
+    { 
+      throw new Error (this.messageService.getMessage('recoveringInvestmentsError'))
+    }
    }
 
    async updateInvestment(investment: UpdateInvestmentInput) : Promise<InvestmentEntity>{
@@ -90,7 +98,7 @@ export class InvestmentService {
           .where("id = :id", {id : deleteInvestmentInput.id})
           .execute()
     
-   return 'Investimento deletado com sucesso'
+   return this.messageService.getMessage('investmentDeletedSuccessfully')
 
    }
 
@@ -102,7 +110,7 @@ export class InvestmentService {
                              .getOne()
 
         if (existingBank) {
-          throw new Error('This bank is already registered')
+          throw new Error(this.messageService.getMessage('bankAlreadyRegistered'))
         }
 
         const result = await this.bankRepository
@@ -117,7 +125,7 @@ export class InvestmentService {
         .execute()
         
         if(result.raw.affectedRows !==1) {
-           throw new Error('Error while creating the bank')
+           throw new Error(this.messageService.getMessage('createBankError'))
         }
 
         return await this.bankRepository
@@ -126,7 +134,7 @@ export class InvestmentService {
         .getOne()
 
     } catch(error){
-        throw new Error(`Error while creating the bank: ${error.message}`)
+        throw new Error(`${this.messageService.getMessage('createBankError')}: ${error.message}`)
     }
    } 
 
