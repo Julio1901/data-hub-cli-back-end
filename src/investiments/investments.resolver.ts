@@ -29,9 +29,18 @@ export class InvestmentResolver {
     }
 
     @Mutation(() => String)
-    createNewInvestment( @Args() args: CreateNewInvestmentArgs){
-        this.investmentService.createNewInvestment(args.data)
-        return "Investmento criado"
+    async createNewInvestment( @Args() args: CreateNewInvestmentArgs){
+         try {
+            await this.investmentService.createNewInvestment(args.data)
+            return "Investmento criado"
+         }catch(error){
+            if (error.message === "Error while creating the investment: This investment is already registered"){
+                throw new HttpException(error.message, HttpStatus.CONFLICT)
+            }else{
+                throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
+            }
+         }
+     
     }
 
     @Mutation(() => InvestmentOutput)

@@ -18,20 +18,44 @@ export class InvestmentService {
 
   ) {}
 
-   //TODO: Realizar tratativa de erros e criar verificações após registro ser criado
-   async createNewInvestment(newInvestment : CreateNewInvestmentInput) {
-    await this.investmentRepository
-    .createQueryBuilder()
-    .insert()
-    .into(InvestmentEntity)
-    .values({
-      type: newInvestment.type,
-      name: newInvestment.name,
-      totalInvested: newInvestment.totalInvested,
-      applicationDate: newInvestment.applicationDate,
-      bankId: newInvestment.bankId
-    })
-    .execute()
+   async createNewInvestment(newInvestment : CreateNewInvestmentInput) : Promise<InvestmentEntity>{
+      try{
+          const existingInvestment = await this.investmentRepository
+                                    .createQueryBuilder('investment_entity')
+                                    .where("name = :name", {name: newInvestment.name})
+                                    .getOne()
+
+          if (existingInvestment) {
+            throw new Error ('This investment is already registered')
+          }
+
+          const result = await this.investmentRepository
+          .createQueryBuilder()
+          .insert()
+          .into(InvestmentEntity)
+          .values({
+            type: newInvestment.type,
+            name: newInvestment.name,
+            totalInvested: newInvestment.totalInvested,
+            applicationDate: newInvestment.applicationDate,
+            bankId: newInvestment.bankId
+          })
+          .execute()
+
+
+          if(result.raw.affectedRows !== 1){
+            throw new Error('Error while creating the investment')
+          }
+
+          return await this.investmentRepository
+                 .createQueryBuilder('investment_entity')
+                 .where("name = :name", {name: newInvestment.name})
+                 .getOne()
+      }catch(error) {
+          throw new Error(`Error while creating the investment: ${error.message}`)
+    }
+    
+
    }
 
    async getInvestments() : Promise<InvestmentEntity[]>{
@@ -96,7 +120,7 @@ export class InvestmentService {
            throw new Error('Error while creating the bank')
         }
 
-        return await await this.bankRepository
+        return await this.bankRepository
         .createQueryBuilder('bank_entity')
         .where("name = :name ", {name: bank.name})
         .getOne()
