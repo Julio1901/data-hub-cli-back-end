@@ -7,6 +7,7 @@ import { BankOutput } from "./outputs/bank-output";
 import { UpdateInvestmentInput } from "./inputs/update-investment-input";
 import { UpdateInvestmentArgs } from "./args/update-investment-args";
 import { DeleteInvestmentArgs } from "./args/delete-investment-args";
+import { HttpException, HttpStatus } from "@nestjs/common";
 
 
 
@@ -51,9 +52,16 @@ export class InvestmentResolver {
 
     @Mutation(() => String)
     async createNewBank( @Args() args: CreateNewBankArgs){
-        const result = await this.investmentService.createNewBank(args.data)
-            console.log(result)
+        try {
+            await this.investmentService.createNewBank(args.data)
             return "Bank create successful"
+        }catch (error) {
+            if (error.message === "Error while creating the bank: This bank is already registered"){
+                throw new HttpException(error.message, HttpStatus.CONFLICT)
+            }else{
+                throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
+            }
+        }
     }
 
     @Query(() => [BankOutput])
