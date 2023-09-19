@@ -8,5 +8,6 @@
     "deleteInvestmentError": "Deleting investment error",
     "bankAlreadyRegistered": "This bank is already registered",
     "createBankError" : "Error while creating the bank",
-    "deleteBankError" : "Error when deleting bank"
+    "deleteBankError" : "Error when deleting bank",
+    "recoveringBanksError": "Error recovering banks"
 }

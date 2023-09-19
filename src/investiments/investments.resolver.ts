@@ -86,12 +86,16 @@ export class InvestmentResolver {
 
     @Query(() => [BankOutput])
     async getBanks(){
-        const result = await this.investmentService.getBanks()
-        const bankList = result.map (bank => {
-            const bankOutput = BankOutput.fromEntity(bank)
-            return bankOutput
-        })
-        return bankList
+        try {
+            const result = await this.investmentService.getBanks()
+            const bankList = result.map (bank => {
+                const bankOutput = BankOutput.fromEntity(bank)
+                return bankOutput
+            })
+            return bankList
+        }catch (error){
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
 }

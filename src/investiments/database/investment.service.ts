@@ -153,8 +153,12 @@ export class InvestmentService {
    } 
 
    async getBanks() : Promise<BankEntity[]>{
-    const banks = await this.bankRepository.find()
-    return banks
+      try {
+        const banks = await this.bankRepository.find()
+        return banks
+      }catch (error) {
+        throw new Error(`${this.messageService.getMessage('recoveringBanksError')}: ${error.message}`) 
+      }
    }
 
    async getBankById(id: number): Promise<BankEntity>{
