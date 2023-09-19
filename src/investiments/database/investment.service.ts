@@ -72,20 +72,29 @@ export class InvestmentService {
    }
 
    async updateInvestment(investment: UpdateInvestmentInput) : Promise<InvestmentEntity>{
-    await this.investmentRepository
-    .createQueryBuilder()
-    .update(InvestmentEntity)
-    .set(investment)
-    .where("id = :id", {id: investment.id})
-    .execute()
+      try {
+        const result = await this.investmentRepository
+        .createQueryBuilder()
+        .update(InvestmentEntity)
+        .set(investment)
+        .where("id = :id", {id: investment.id})
+        .execute()
+        
+        if (result.affected !== 1) {  
+          throw new Error (this.messageService.getMessage('updateInvestmentError'))
+        }
 
-    const investmentUpdated = await this.investmentRepository
-                              .createQueryBuilder()
-                              .select("investment")
-                              .from(InvestmentEntity, "investment")
-                              .where("investment.id = :id", {id: investment.id})
-                              .getOne()
-    return investmentUpdated
+        const investmentUpdated = await this.investmentRepository
+                                  .createQueryBuilder()
+                                  .select("investment")
+                                  .from(InvestmentEntity, "investment")
+                                  .where("investment.id = :id", {id: investment.id})
+                                  .getOne()                        
+        return investmentUpdated
+      } catch (error) {
+        throw new Error(`${this.messageService.getMessage('updateInvestmentError')}: ${error}`)
+      }
+    
    }
 
 

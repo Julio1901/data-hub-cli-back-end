@@ -3,6 +3,7 @@
     "investmentAlreadyRegistered": "This investment is already registered",
     "createInvestmentError" : "Error while creating the investment",
     "investmentDeletedSuccessfully": "Investment successfully deleted",
+    "updateInvestmentError" : "Error updating investment",
     "recoveringInvestmentsError" : "Error recovering investments",
     "bankAlreadyRegistered": "This bank is already registered",
     "createBankError" : "Error while creating the bank"

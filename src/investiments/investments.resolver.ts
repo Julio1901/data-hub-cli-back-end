@@ -48,12 +48,16 @@ export class InvestmentResolver {
 
     @Mutation(() => InvestmentOutput)
     async updateInvestment(@Args() args: UpdateInvestmentArgs){
-        console.log(args.data)
-        const result = await this.investmentService.updateInvestment(args.data)
-        const bank = await this.investmentService.getBankById(result.bankId)
-        const response = InvestmentOutput.fromEntity(result)
-        response.bank =  BankOutput.fromEntity(bank)
-        return response
+        try {
+            console.log(args.data)
+            const result = await this.investmentService.updateInvestment(args.data)
+            const bank = await this.investmentService.getBankById(result.bankId)
+            const response = InvestmentOutput.fromEntity(result)
+            response.bank =  BankOutput.fromEntity(bank)
+            return response
+        }catch(error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
     @Mutation(() => String)
