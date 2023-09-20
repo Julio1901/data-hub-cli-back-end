@@ -162,11 +162,15 @@ export class InvestmentService {
    }
 
    async getBankById(id: number): Promise<BankEntity>{
-    const bank =  await this.bankRepository
-                        .createQueryBuilder("bank_entity")
-                        .where("bank_entity.id= :id", {id: id})
-                        .getOne()
-    return bank
+    try {
+      const bank =  await this.bankRepository
+      .createQueryBuilder("bank_entity")
+      .where("bank_entity.id= :id", {id: id})
+      .getOne()
+      return bank
+    } catch(error){
+      throw new Error(`${this.messageService.getMessage('recoveringOneBankError')}: ${error.message}`)
+    }
    }
 
  }

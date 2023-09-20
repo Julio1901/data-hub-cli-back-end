@@ -10,7 +10,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 
 
 
-@Resolver()
+@Resolver('investment')
 export class InvestmentResolver {
    
     constructor(private readonly investmentService: InvestmentService) {}

@@ -9,5 +9,6 @@
     "bankAlreadyRegistered": "This bank is already registered",
     "createBankError" : "Error while creating the bank",
     "deleteBankError" : "Error when deleting bank",
-    "recoveringBanksError": "Error recovering banks"
+    "recoveringBanksError": "Error recovering banks",
+    "recoveringOneBankError": "Error recovering bank by id"
 }
