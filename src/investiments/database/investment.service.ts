@@ -7,6 +7,7 @@ import { CreateNewBankInput } from '../inputs/create-new-bank-input';
 import { UpdateInvestmentInput } from '../inputs/update-investment-input';
 import { DeleteInvestmentInput } from '../inputs/delete-investment-input';
 import { MessageService } from 'src/utils/message-service';
+import { IMessageService } from 'src/utils/message-service-interface';
 
 @Injectable()
 export class InvestmentService {
@@ -19,7 +20,8 @@ export class InvestmentService {
 
   ) {}
 
-  private messageService = new MessageService()
+  // private messageService = new MessageService()
+  private messageService : IMessageService
 
    async createNewInvestment(newInvestment : CreateNewInvestmentInput) : Promise<InvestmentEntity>{
       try{

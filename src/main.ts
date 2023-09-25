@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import * as readline from 'readline';
 
 
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(3000);
 
